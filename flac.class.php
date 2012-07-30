@@ -1,6 +1,19 @@
 <?PHP
 
-class Flac {
+/**
+ * @license GNU General Public License http://www.gnu.org/licenses/licenses.html#GPL
+ * @author BlueMöhre <bluemoehre@gmx.de>
+ * @copyright 2012 BlueMöhre
+ * @link http://www.github.com/bluemoehre
+ *
+ * This code is based upon the really great FLAC-Project by Josh Coalson
+ * http://flac.sourceforge.net
+ *
+ * This code is formatted regarding the official code style (mostly ;)
+ * http://github.com/php-fig/fig-standards/tree/master/accepted
+ */
+class Flac
+{
 
     const ERR_FILE_INVALID = 'Invalid FLAC File.';
     const ERR_FILE_UNREADABLE = 'Cannot read file.';
@@ -37,7 +50,8 @@ class Flac {
      * @param string $file
      * @throws ErrorException
      */
-    public function __construct($file){
+    public function __construct($file)
+    {
         $this->file = $file;
         if (!$this->fileHandle = @fopen($file,'rb')) throw new ErrorException(self::ERR_FILE_UNREADABLE, E_USER_ERROR);
         if ($this->read(4) != 'fLaC') throw new ErrorException(self::ERR_FILE_INVALID, E_USER_ERROR);
@@ -49,7 +63,8 @@ class Flac {
      * Magic getter for all protected properties
      * @param string $property
      */
-    public function __get($property){
+    public function __get($property)
+    {
         return $this->$property;
     }
 
@@ -59,7 +74,8 @@ class Flac {
      * @throws ErrorException
      * @throws Exception
      */
-    protected function fetchMetaBlocks(){
+    protected function fetchMetaBlocks()
+    {
         $this->streamMetaBlocks = array(
             self::META_BLOCK_STREAMINFO => 0,
             self::META_BLOCK_PADDING => 0,
@@ -175,7 +191,8 @@ class Flac {
      * @throws Exception
      * @return string
      */
-    protected function read($length){
+    protected function read($length)
+    {
         if ((int)$length < 1) throw new LogicException(self::ERR_PARAMETER, E_USER_ERROR);
         if (!$data = @fread($this->fileHandle, $length)) throw new Exception(self::ERR_FILE_UNREADABLE, E_USER_ERROR);
         return $data;
