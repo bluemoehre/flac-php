@@ -144,17 +144,17 @@ class Flac
                 $this->vorbisComment = array();
                 $raw = $this->read($metaBlockLength);
                 $strpos = 0;
-                $this->vorbisComment['vendorLength'] = ord(substr($raw, $strpos, 4));
+                $this->vorbisComment['vendorLength'] = self::decodeUint(substr($raw, $strpos, 4));
                 $strpos += 4;
                 $this->vorbisComment['vendorString'] = substr($raw, $strpos, $this->vorbisComment['vendorLength']);
                 $strpos += $this->vorbisComment['vendorLength'];
                 $commentsLength = substr($raw, $strpos, 4);
                 $strpos += 4;
-                $commentsLength = ord($commentsLength);
+                $commentsLength = self::decodeUint($commentsLength);
                 for($i = 0; $i < $commentsLength; $i++){
                     $commentSize = substr($raw, $strpos, 4);
                     $strpos += 4;
-                    $commentSize = ord($commentSize); # Bugged -> max 100 Zeichen =/
+                    $commentSize = self::decodeUint($commentSize);
                     $comment = substr($raw, $strpos, $commentSize);
                     $strpos += $commentSize;
                     $pos = strpos($comment, '=');
@@ -198,6 +198,16 @@ class Flac
         return $data;
     }
 
+    /**
+     * @param string $value (4 Bytes uint32)
+     * @return number
+     */
+    protected static function decodeUint($value)
+    {
+        $ints = unpack('n2ints', $value);
+        $value = $ints['ints1'] * (256 * 256) + intval($ints['ints2']) - 1;
+        return $value;
+    }
 }
 
 ?>
