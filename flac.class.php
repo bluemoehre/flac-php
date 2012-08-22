@@ -89,12 +89,11 @@ class Flac
         # read all meta blocks
         $lastMetaBlock = false;
         while (!$lastMetaBlock && !feof($this->fileHandle)){
-            $format = 'vlast_type/nlength';
-            $data = unpack($format, $this->read(4)); # read block header at once
-            if ($data['last_type'] & 128) $lastMetaBlock = true; # true if this is the last meta block
-            $metaBlockType = $data['last_type'] & 127; # we need to look at the last 7 bits of the byte
-            $metaBlockLength = $data['length'];
-
+            $metaBlockHeader = $this->read(4); # read block header at once
+            $data = unpack('nlast_type/X/X/Nlength', $metaBlockHeader);
+            if ($data['last_type'] >> 15) $lastMetaBlock = true; # the first bit defines if this is the last meta block
+            $metaBlockType = $data['last_type'] >> 8 & 127; # bits 2-8 (7bit) of 16 define the block type
+            $metaBlockLength = $data['length'] & 16777215; # bits 9-32 (24bit) of 32 define block length
             # Streaminfo
             if ($metaBlockType == self::META_BLOCK_STREAMINFO){
                 if ($this->streamMetaBlocks[self::META_BLOCK_STREAMINFO] > 0) throw new ErrorException(self::ERR_META_INVALID, E_USER_ERROR); # STREAMINFO must be the first meta block and it can be specified only once
@@ -144,17 +143,18 @@ class Flac
                 $this->vorbisComment = array();
                 $raw = $this->read($metaBlockLength);
                 $strpos = 0;
-                $this->vorbisComment['vendorLength'] = self::decodeUint(substr($raw, $strpos, 4));
+                $data = unpack('V', substr($raw, $strpos, 4));
+                $this->vorbisComment['vendorLength'] = $data[1];
                 $strpos += 4;
                 $this->vorbisComment['vendorString'] = substr($raw, $strpos, $this->vorbisComment['vendorLength']);
                 $strpos += $this->vorbisComment['vendorLength'];
-                $commentsLength = substr($raw, $strpos, 4);
+                $data = unpack('V', substr($raw, $strpos, 4));
+                $commentsLength = $data[1];
                 $strpos += 4;
-                $commentsLength = self::decodeUint($commentsLength);
                 for($i = 0; $i < $commentsLength; $i++){
-                    $commentSize = substr($raw, $strpos, 4);
+                    $data = unpack('V', substr($raw, $strpos, 4));
+                    $commentSize = $data[1];
                     $strpos += 4;
-                    $commentSize = self::decodeUint($commentSize);
                     $comment = substr($raw, $strpos, $commentSize);
                     $strpos += $commentSize;
                     $pos = strpos($comment, '=');
@@ -198,16 +198,6 @@ class Flac
         return $data;
     }
 
-    /**
-     * @param string $value (4 Bytes uint32)
-     * @return number
-     */
-    protected static function decodeUint($value)
-    {
-        $ints = unpack('n2ints', $value);
-        $value = $ints['ints1'] * (256 * 256) + intval($ints['ints2']) - 1;
-        return $value;
-    }
 }
 
 ?>
