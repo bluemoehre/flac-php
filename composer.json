@@ -1,0 +1,7 @@
+{
+  "name": "bluemoehre/flac-php",
+  "description": "PHP class for native reading FLAC's metadata",
+  "autoload": {
+    "classmap": ["flac.class.php"]
+  }
+}
