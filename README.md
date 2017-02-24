@@ -1,4 +1,4 @@
-FLAC-PHP ![Build Status](https://travis-ci.org/bluemoehre/flac-php.svg?branch=master)
+FLAC-PHP [![Build Status](https://travis-ci.org/bluemoehre/flac-php.svg?branch=master)](https://travis-ci.org/bluemoehre/flac-php)
 ========
 
 Class for native reading FLAC's metadata in PHP.
