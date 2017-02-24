@@ -7,10 +7,10 @@ Provides direct access to the Vorbis comment (artist, title, album, …) to fetc
 Installation
 ------------
 
-This class can easily be installed via [Composer](https://getcomposer.org):\
+This class can easily be installed via [Composer](https://getcomposer.org):  
 `composer require bluemoehre/flac-php`
 
-Alternatively you may include it the old fashioned way of downloading and adding it via\
+Alternatively you may include it the old fashioned way of downloading and adding it via  
 `require 'Flac.php'`
 
 Usage
@@ -48,5 +48,5 @@ TODOs
 
 Technical information
 ---------------------
-FLAC: https://xiph.org/flac/format.html\
+FLAC: https://xiph.org/flac/format.html  
 Vorbis comment: https://www.xiph.org/vorbis/doc/v-comment.html
