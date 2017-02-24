@@ -1,26 +1,52 @@
-FLAC-PHP
+FLAC-PHP ![Build Status](https://travis-ci.org/bluemoehre/flac-php.svg?branch=master)
 ========
 
-Class for native reading FLAC's meta data.
+Class for native reading FLAC's metadata in PHP.
+Provides direct access to the Vorbis comment (artist, title, album, …) to fetch all desired information.
 
-Example
--------
+Installation
+------------
 
+This class can easily be installed via [Composer](https://getcomposer.org):\
+`composer require bluemoehre/flac-php`
+
+Alternatively you may include it the old fashioned way of downloading and adding it via\
+`require 'Flac.php'`
+
+Usage
+-----
 ```php
 <?php
-require('php/flac.class.php');
+
+use bluemoehre\Flac;
 
 header('Content-Type: text/plain;charset=utf-8');
 
+// benchmark start
 $t = microtime(true);
+
 $flac = new Flac('mySong.flac');
-echo 'Meta-Blocks: '; print_r($flac->streamMetaBlocks); echo "\n";
-echo 'Sample Rate: '.$flac->streamSampleRate."\n";
-echo 'Channels: '.$flac->streamChannels."\n";
-echo 'Bits per sample: '.$flac->streamBitsPerSample."\n";
-echo 'Total samples: '.$flac->streamTotalSamples."\n";
-echo 'Duration: '.$flac->streamDuration."\n";
-echo 'MD5 checksum (audio data): '.$flac->streamMd5."\n";
-echo 'Vorbis-Comment: ';nl2br(print_r($flac->vorbisComment)); echo "\n\n";
-echo 'runtime: '.(microtime(true) - $t).'s';
+
+// benchmark end
+$t = microtime(true) - $t;
+
+echo 'Benchmark: ' . $t .'s' . "\n\n";
+echo 'Meta-Blocks: '; print_r($flac->getMetadataBlockCounts()); echo "\n";
+echo 'Sample Rate: '.$flac->getSampleRate()."\n";
+echo 'Channels: '.$flac->getChannels()."\n";
+echo 'Bits per sample: '.$flac->getBitsPerSample()."\n";
+echo 'Total samples: '.$flac->getTotalSamples()."\n";
+echo 'Duration: '.$flac->getDuration()."s\n";
+echo 'MD5 checksum (audio data): '.$flac->getAudioMd5()."\n";
+echo 'Vorbis-Comment: '; nl2br(print_r($flac->getVorbisComment())); echo "\n";
 ```
+
+TODOs
+-----
+- Add getter for pictures
+
+
+Technical information
+---------------------
+FLAC: https://xiph.org/flac/format.html\
+Vorbis comment: https://www.xiph.org/vorbis/doc/v-comment.html
