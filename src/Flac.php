@@ -42,6 +42,9 @@ class Flac
     /** @var string */
     protected $filename;
 
+    /** @var int */
+    protected $fileSize;
+
     /** @var resource */
     protected $fileHandle;
 
@@ -136,6 +139,7 @@ class Flac
             throw new UnexpectedValueException('Invalid file type. File is not FLAC!', self::E_FILE_TYPE);
         }
 
+        $this->fileSize = filesize($file);
         $this->fetchMetadataBlocks();
     }
 
@@ -331,6 +335,14 @@ class Flac
     public function getFilename()
     {
         return $this->filename;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFileSize()
+    {
+        return $this->fileSize;
     }
 
     /**

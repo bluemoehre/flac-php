@@ -31,13 +31,15 @@ $flac = new Flac('mySong.flac');
 $t = microtime(true) - $t;
 
 echo 'Benchmark: ' . $t .'s' . "\n\n";
+echo 'Filename: ' . $flac->getFilename() . "\n";
+echo 'File size: ' . $flac->getFileSize() . " Bytes\n";
 echo 'Meta-Blocks: '; print_r($flac->getMetadataBlockCounts()); echo "\n";
-echo 'Sample Rate: '.$flac->getSampleRate()."\n";
-echo 'Channels: '.$flac->getChannels()."\n";
-echo 'Bits per sample: '.$flac->getBitsPerSample()."\n";
-echo 'Total samples: '.$flac->getTotalSamples()."\n";
-echo 'Duration: '.$flac->getDuration()."s\n";
-echo 'MD5 checksum (audio data): '.$flac->getAudioMd5()."\n";
+echo 'Sample Rate: ' . $flac->getSampleRate() . "\n";
+echo 'Channels: ' . $flac->getChannels() . "\n";
+echo 'Bits per sample: ' . $flac->getBitsPerSample() . "\n";
+echo 'Total samples: ' . $flac->getTotalSamples() . "\n";
+echo 'Duration: ' . $flac->getDuration() . "s\n";
+echo 'MD5 checksum (audio data): ' . $flac->getAudioMd5() . "\n";
 echo 'Vorbis-Comment: '; nl2br(print_r($flac->getVorbisComment())); echo "\n";
 ```
 
