@@ -1,6 +1,7 @@
 {
   "name": "bluemoehre/flac-php",
   "description": "PHP class for native reading FLAC's metadata and Vorbis comment",
+  "license": "GPL-2.0-only",
   "autoload": {
     "classmap": ["src/Flac.php"]
   },
