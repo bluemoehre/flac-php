@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        php: ["latest", "8.1", "7.4"]
+
+    runs-on: ${{ matrix.os }}
+    name: Test on ${{ matrix.os }}, PHP ${{ matrix.php }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: php-actions/composer@v6
+
+      - name: PHPUnit tests
+        uses: php-actions/phpunit@v4
+        with:
+          php_version: ${{ matrix.php }}
