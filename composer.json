@@ -6,6 +6,6 @@
     "classmap": ["src/Flac.php"]
   },
   "require-dev": {
-    "phpunit/phpunit": "5.7.*"
+    "phpunit/phpunit": "9.*"
   }
 }
